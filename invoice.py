@@ -1,9 +1,9 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-# class AlignDelegate(QtGui.QItemDelegate):
-#     def paint(self, painter, option, index):
-#         option.displayAlignment = QtCore.Qt.AlignCenter
-#         QtGui.QItemDelegate.paint(self, painter, option, index)
+class AlignDelegate(QtWidgets.QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        option.displayAlignment = QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter
+        QtWidgets.QStyledItemDelegate.paint(self, painter, option, index)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -601,6 +601,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setRowCount(0)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(6)
+        self.tableWidget.setItemDelegate(AlignDelegate())
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()

@@ -18,13 +18,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #### invoice_page ####
         # header button action
         self.new_btn.clicked.connect(self.new_invoice)
+        self.add_btn.clicked.connect(self.open_add_item_dialog)
         self.clear_btn.clicked.connect(self.clear_table_data)
 
 
 
 
         ### add_item_dialog ###
-        self.add_btn.clicked.connect(self.open_add_item_dialog)
 
     def invoice_page(self):
         self.stackedWidget.setCurrentIndex(1)
@@ -46,9 +46,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.set_tax.setValue(0.00)
 
     def clear_table_data(self):
-        # for i in range(self.table.rowCount()):
-        #     self.table.removeRow(0)
-        pass
+        for i in range(self.tableWidget.rowCount()):
+            self.tableWidget.removeRow(0)
 
     def new_invoice(self):
         self.clear_table_data()
