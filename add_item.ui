@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>add_item</class>
+ <widget class="QDialog" name="add_item">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>447</width>
+    <height>443</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">* {
+	font-family: Calibri;
+	font-size:12px;
+}
+
+#window_title {
+	font-size:13px;
+	color:black;
+	font-weight:bold;
+}
+
+#QDialog {
+    background-color: white;
+}
+
+QLabel  {
+/* 	color:#7B68EE;*/
+	font-size:11px;
+	font-weight:Normal;
+}
+
+QLineEdit, QPlainTextEdit, QComboBox, QSpinBox, QDoubleSpinBox {
+	font-size:11px;
+	font-weight:bold;
+	border: none;
+	border-bottom: 2px solid #E5E4E2;
+
+}
+
+QLineEdit:focus, QPlainTextEdit:focus,QComboBox:focus,QSpinBox:focus,QDoubleSpinBox:focus {
+	border-bottom: 2px solid #7B68EE;
+}
+
+QPushButton {
+	font-size: 12px;
+	background-color:white;
+	border: 2px solid  #E5E4E2;
+	border-radius: 5px;
+}
+
+QPushButton:hover {
+	border: 2px solid #7B68EE;
+}
+
+</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>433</width>
+     <height>562</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="spacing">
+     <number>11</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="window_title">
+      <property name="text">
+       <string>Add New Item</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="idFrame" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Item ID </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="item_id">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Item Name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="item_name">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="insertPolicy">
+          <enum>QComboBox::InsertAtBottom</enum>
+         </property>
+         <item>
+          <property name="text">
+           <string>Item_1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Item_2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Item_3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Item_4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Item_5</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="priceFrame" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Price</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="price">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Quantity</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="quantity">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="descriptionFrame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Description</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="description"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="btnFrame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="add_item_btn">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clear_field_btn">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="close_window_btn">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Close</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../icons/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
