@@ -8,9 +8,9 @@ class AlignDelegate(QtWidgets.QStyledItemDelegate):
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-        MainWindow.setMinimumSize(QtCore.QSize(800, 620))
-        MainWindow.setMaximumSize(QtCore.QSize(800, 620))
+        MainWindow.resize(800, 650)
+        MainWindow.setMinimumSize(QtCore.QSize(800, 650))
+        MainWindow.setMaximumSize(QtCore.QSize(800, 650))
         MainWindow.setStyleSheet("#MainWindow {\n"
 "    background-color: white;\n"
 "/*    background-color:#a9d39e*/\n"
@@ -37,7 +37,7 @@ class Ui_MainWindow(object):
 "    font-weight:Normal;\n"
 "}\n"
 "\n"
-"QLineEdit, QPlainTextEdit, QComboBox, QDateEdit, QSpinBox, QDoubleSpinBox {\n"
+"QLineEdit, QPlainTextEdit, QComboBox {\n"
 "    font-size:11px;\n"
 "    font-weight:bold;\n"
 "    border: none;\n"
@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "\n"
-"QLineEdit:focus,QPlainTextEdit:focus,QDateEdit:focus,QComboBox:focus,QSpinBox:focus,QDoubleSpinBox:focus {\n"
+"QLineEdit:focus,QPlainTextEdit:focus,QComboBox:focus {\n"
 "    border-bottom: 2px solid #7B68EE;\n"
 "}\n"
 "\n"
@@ -250,8 +250,9 @@ class Ui_MainWindow(object):
         self.headerInvoiceFrame.setObjectName("headerInvoiceFrame")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.headerInvoiceFrame)
         self.horizontalLayout_4.setContentsMargins(0, 5, 5, 5)
-        self.horizontalLayout_4.setSpacing(0)
+        self.horizontalLayout_4.setSpacing(20)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+
         self.new_btn = QtWidgets.QPushButton(parent=self.headerInvoiceFrame)
         self.new_btn.setMinimumSize(QtCore.QSize(0, 25))
         self.new_btn.setMaximumSize(QtCore.QSize(100, 30))
@@ -349,7 +350,8 @@ class Ui_MainWindow(object):
         self.label_13 = QtWidgets.QLabel(parent=self.frame)
         self.label_13.setObjectName("label_13")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_13)
-        self.dateEdit = QtWidgets.QDateEdit(parent=self.frame)
+
+        self.dateEdit = QtWidgets.QLineEdit(parent=self.frame)
         self.dateEdit.setMinimumSize(QtCore.QSize(100, 25))
         self.dateEdit.setObjectName("dateEdit")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.dateEdit)
@@ -391,6 +393,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.addWidget(self.label_16)
         self.total = QtWidgets.QLineEdit(parent=self.frame_4)
         self.total.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.total.setText("0.00")
         self.total.setObjectName("total")
         self.horizontalLayout_7.addWidget(self.total)
         self.verticalLayout_8.addWidget(self.frame_4)
@@ -415,6 +418,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
         self.total_quantity = QtWidgets.QLineEdit(parent=self.frame_8)
         self.total_quantity.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.total_quantity.setText("0")
         self.total_quantity.setObjectName("total_quantity")
         self.horizontalLayout_11.addWidget(self.total_quantity)
         self.verticalLayout_11.addWidget(self.frame_8)
@@ -446,6 +450,7 @@ class Ui_MainWindow(object):
         self.subtotal = QtWidgets.QLineEdit(parent=self.frame_10)
         self.subtotal.setMinimumSize(QtCore.QSize(100, 25))
         self.subtotal.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.subtotal.setText("0.00")
         self.subtotal.setObjectName("subtotal")
         self.horizontalLayout_15.addWidget(self.subtotal)
         spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
@@ -464,6 +469,7 @@ class Ui_MainWindow(object):
         self.discount = QtWidgets.QLineEdit(parent=self.frame_11)
         self.discount.setMinimumSize(QtCore.QSize(0, 25))
         self.discount.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.discount.setText("0.00")
         self.discount.setObjectName("discount")
         self.horizontalLayout_14.addWidget(self.discount)
         self.horizontalLayout_12.addWidget(self.frame_11)
@@ -495,6 +501,7 @@ class Ui_MainWindow(object):
         self.tax.setSizePolicy(sizePolicy)
         self.tax.setMinimumSize(QtCore.QSize(100, 25))
         self.tax.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.tax.setText("0.00")
         self.tax.setObjectName("tax")
         self.horizontalLayout_6.addWidget(self.tax)
         spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
@@ -510,12 +517,35 @@ class Ui_MainWindow(object):
         self.label_18.setMinimumSize(QtCore.QSize(50, 0))
         self.label_18.setObjectName("label_18")
         self.horizontalLayout_16.addWidget(self.label_18)
-        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.horizontalLayout_16.addItem(spacerItem13)
-        self.set_tax = QtWidgets.QDoubleSpinBox(parent=self.frame_3)
-        self.set_tax.setMinimumSize(QtCore.QSize(80, 25))
-        self.set_tax.setObjectName("set_tax")
+
+
+        # remove Qdoublespinbox
+
+        # spacer for qdoublespin box
+        # spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        # self.horizontalLayout_16.addItem(spacerItem13)
+
+        # self.set_tax = QtWidgets.QDoubleSpinBox(parent=self.frame_3)
+        # self.set_tax.setMinimumSize(QtCore.QSize(180, 250))
+        # self.set_tax.setObjectName("set_tax")
+        # self.set_tax.setRange(0.00, 120.00)
+        # self.set_tax.setValue(7.50)
+        # self.set_tax.setSingleStep(0.1)
+        # self.set_tax.setEnabled(True)
+        # self.horizontalLayout_16.addWidget(self.set_tax)
+
+        self.set_tax = QtWidgets.QLineEdit(parent=self.frame_3)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tax.sizePolicy().hasHeightForWidth())
+        self.set_tax.setSizePolicy(sizePolicy)
+        self.set_tax.setMinimumSize(QtCore.QSize(0, 25))
+        self.set_tax.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.set_tax.setText("7.50")
+        self.set_tax.setObjectName("tax rate(%)")
         self.horizontalLayout_16.addWidget(self.set_tax)
+
         self.horizontalLayout_13.addWidget(self.frame_3)
         self.verticalLayout_12.addWidget(self.frame_9)
         self.verticalLayout_9.addWidget(self.widget_4)
@@ -653,14 +683,26 @@ class Ui_MainWindow(object):
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.horizontalLayout_3.addWidget(self.tableWidget)
         self.verticalLayout_6.addWidget(self.tableFrame)
-        spacerItem15 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        spacerItem15 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout_6.addItem(spacerItem15)
+
+
         self.stackedWidget.addWidget(self.create_invoice_page)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+
+        # self.stackedWidget.setCurrentIndex(0)
+        # skip sign in page
+        self.stackedWidget.setCurrentIndex(1)
+
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+
+
+    def value_changed(self, value):
+        print(f"Value changed to: {value}")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -680,9 +722,7 @@ class Ui_MainWindow(object):
         self.label_13.setText(_translate("MainWindow", "Date :"))
         self.label_19.setText(_translate("MainWindow", "Total: "))
         self.label_16.setText(_translate("MainWindow", "$"))
-        self.total.setText(_translate("MainWindow", "12354"))
         self.label_22.setText(_translate("MainWindow", "Total Quantity :"))
-        self.total_quantity.setText(_translate("MainWindow", "12303"))
         self.label_14.setText(_translate("MainWindow", "Subtotal :"))
         self.label_17.setText(_translate("MainWindow", "Discount :"))
         self.label_15.setText(_translate("MainWindow", "Tax :"))

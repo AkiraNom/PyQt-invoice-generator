@@ -4,9 +4,9 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_add_item(object):
     def setupUi(self, add_item):
         add_item.setObjectName("add_item")
-        add_item.resize(450, 460)
-        add_item.setMinimumSize(QtCore.QSize(450, 460))
-        add_item.setMaximumSize(QtCore.QSize(450, 460))
+        add_item.resize(450, 470)
+        add_item.setMinimumSize(QtCore.QSize(450, 470))
+        add_item.setMaximumSize(QtCore.QSize(450, 470))
         add_item.setStyleSheet("* {\n"
 "    font-family: Calibri;\n"
 "    font-size:12px;\n"
@@ -18,8 +18,20 @@ class Ui_add_item(object):
 "    font-weight:bold;\n"
 "}\n"
 "\n"
-"#QDialog {\n"
-"    background-color: white;\n"
+"\n"
+"QDialog {\n"
+"/*    background-color: white;*/\n"
+"    background-color: #fcfcfc;\n"
+"    background-color: #f9f9f9;\n"
+"}\n"
+"#descriptionFrame {\n"
+"    border: 0;\n"
+"    background-color:transparent;\n"
+"}\n"
+"\n"
+"#btnFrame {\n"
+"    border: 0;\n"
+"    background-color:transparent;\n"
 "}\n"
 "\n"
 "QLabel  {\n"
@@ -113,12 +125,20 @@ class Ui_add_item(object):
         self.label_4.setMaximumSize(QtCore.QSize(70, 16777215))
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_4.addWidget(self.label_4)
-        self.price = QtWidgets.QDoubleSpinBox(parent=self.priceFrame)
-        self.price.setMinimumSize(QtCore.QSize(150, 25))
-        self.price.setObjectName("price")
-        self.price.setMaximum(99999.99)
-        self.price.setMinimum(0.0)
-        self.price.setValue(0.0)
+
+        self.price = QtWidgets.QLineEdit(parent=self.priceFrame)
+        self.price.setMinimumSize(QtCore.QSize(100, 25))
+        self.price.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.price.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.price.setText("0.00")
+
+        # self.price = QtWidgets.QDoubleSpinBox(parent=self.priceFrame)
+        # self.price.setMinimumSize(QtCore.QSize(150, 25))
+        # self.price.setObjectName("price")
+        # self.price.setRange(0.00, 99999.99)
+        # self.price.setValue(0.00)
+
+        self.price.setEnabled(True)
         self.horizontalLayout_4.addWidget(self.price)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem2)
@@ -130,11 +150,11 @@ class Ui_add_item(object):
         self.label_5.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_5.setObjectName("label_5")
         self.horizontalLayout_4.addWidget(self.label_5)
-        self.quantity = QtWidgets.QSpinBox(parent=self.priceFrame)
+        self.quantity = QtWidgets.QLineEdit(parent=self.priceFrame)
         self.quantity.setMinimumSize(QtCore.QSize(100, 25))
         self.quantity.setMaximumSize(QtCore.QSize(100, 16777215))
-        self.quantity.setMinimum(0)
-        self.price.setValue(0)
+        self.quantity.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.quantity.setText("0")
         self.quantity.setObjectName("quantity")
         self.horizontalLayout_4.addWidget(self.quantity)
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
@@ -164,15 +184,15 @@ class Ui_add_item(object):
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem5)
         self.add_item_btn = QtWidgets.QPushButton(parent=self.btnFrame)
-        self.add_item_btn.setMinimumSize(QtCore.QSize(40, 0))
+        self.add_item_btn.setMinimumSize(QtCore.QSize(60, 25))
         self.add_item_btn.setObjectName("add_item_btn")
         self.horizontalLayout_3.addWidget(self.add_item_btn)
         self.clear_field_btn = QtWidgets.QPushButton(parent=self.btnFrame)
-        self.clear_field_btn.setMinimumSize(QtCore.QSize(40, 0))
+        self.clear_field_btn.setMinimumSize(QtCore.QSize(60, 25))
         self.clear_field_btn.setObjectName("clear_field_btn")
         self.horizontalLayout_3.addWidget(self.clear_field_btn)
         self.close_window_btn = QtWidgets.QPushButton(parent=self.btnFrame)
-        self.close_window_btn.setMinimumSize(QtCore.QSize(40, 0))
+        self.close_window_btn.setMinimumSize(QtCore.QSize(60, 25))
         self.close_window_btn.setObjectName("close_window_btn")
         self.horizontalLayout_3.addWidget(self.close_window_btn)
         self.verticalLayout_2.addWidget(self.btnFrame)

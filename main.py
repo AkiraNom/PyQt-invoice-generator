@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidgetItem
+from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidgetItem, QMessageBox
 
 from invoice import Ui_MainWindow
 from add_item import Ui_add_item
@@ -21,9 +21,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.add_btn.clicked.connect(self.open_add_item_dialog)
         self.clear_btn.clicked.connect(self.clear_table_data)
 
-
-
-
         ### add_item_dialog ###
 
     def invoice_page(self):
@@ -43,7 +40,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.subtotal.setText("0.00")
         self.discount.setText("0.00")
         self.tax.setText("0.00")
-        self.set_tax.setValue(0.00)
+        self.set_tax.setText("7.50")
 
     def clear_table_data(self):
         for i in range(self.tableWidget.rowCount()):
@@ -65,12 +62,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def show_data(self, data):
 
-        id = str(data['id'])
-        name = str(data['name'])
-        desc = str(data['description'])
-        price = str(f"{data['price']:.2f}")
-        quantity = str(data['quantity'])
-        amount = str(f"{data['price']*data['quantity']:.2f}")
+        try:
+            id = str(data['id'])
+            name = str(data['name'])
+            desc = str(data['description'])
+            price = str(data['price'])
+            quantity = str(data['quantity'])
+            amount = str(f"{float(data['price'])*int(data['quantity']):.2f}")
+
+        except ValueError:
+            dlg = QMessageBox(self)
+            dlg.setWindowTitle("Input Error")
+            dlg.setText("""Invalid data value \nQuantity must be an integral number""")
+            dlg.setIcon(QMessageBox.Icon.Warning)
+            button = dlg.exec()
+
+            if button == QMessageBox.StandardButton.Close:
+                print("Close")
+
+            return
 
         table = self.tableWidget
         row_count = table.rowCount()
@@ -93,15 +103,13 @@ class AddItemWindow(QDialog):
         self.ui = Ui_add_item()
         self.ui.setupUi(self)
 
-
-
     def new_item_data(self):
         # retrieve data from input field
         id = self.ui.item_id.text().strip()
         name = self.ui.item_name.currentText().strip()
         desc = self.ui.description.toPlainText()
-        price = self.ui.price.value()
-        quantity = self.ui.quantity.value()
+        price = self.ui.price.text().strip()
+        quantity = self.ui.quantity.text().strip()
 
         data_dict = {
             "id" : id,
@@ -127,8 +135,8 @@ class AddItemWindow(QDialog):
         # Clear data in UI components
         self.ui.item_id.clear()
         self.ui.item_name.clear()
-        self.ui.price.setValue(0.0)
-        self.ui.quantity.setValue(0)
+        self.ui.price.setText("0.00")
+        self.ui.quantity.setText("0.00")
         self.ui.description.clear()
 
     def close_item_window(self):
