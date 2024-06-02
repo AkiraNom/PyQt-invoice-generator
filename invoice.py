@@ -1,3 +1,4 @@
+from datetime import datetime
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 class AlignDelegate(QtWidgets.QStyledItemDelegate):
@@ -252,7 +253,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setContentsMargins(0, 5, 5, 5)
         self.horizontalLayout_4.setSpacing(20)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-
         self.new_btn = QtWidgets.QPushButton(parent=self.headerInvoiceFrame)
         self.new_btn.setMinimumSize(QtCore.QSize(0, 25))
         self.new_btn.setMaximumSize(QtCore.QSize(100, 30))
@@ -346,15 +346,17 @@ class Ui_MainWindow(object):
         self.n_invoice = QtWidgets.QLineEdit(parent=self.frame)
         self.n_invoice.setMinimumSize(QtCore.QSize(30, 20))
         self.n_invoice.setObjectName("n_invoice")
+        self.n_invoice.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.n_invoice)
         self.label_13 = QtWidgets.QLabel(parent=self.frame)
         self.label_13.setObjectName("label_13")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_13)
-
-        self.dateEdit = QtWidgets.QLineEdit(parent=self.frame)
-        self.dateEdit.setMinimumSize(QtCore.QSize(100, 25))
-        self.dateEdit.setObjectName("dateEdit")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.dateEdit)
+        self.date = QtWidgets.QLineEdit(parent=self.frame)
+        self.date.setMinimumSize(QtCore.QSize(100, 25))
+        self.date.setObjectName("date")
+        self.date.setText(datetime.today().strftime('%Y-%m-%d'))
+        self.date.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.date)
         spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.formLayout.setItem(4, QtWidgets.QFormLayout.ItemRole.FieldRole, spacerItem7)
         spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
@@ -517,23 +519,6 @@ class Ui_MainWindow(object):
         self.label_18.setMinimumSize(QtCore.QSize(50, 0))
         self.label_18.setObjectName("label_18")
         self.horizontalLayout_16.addWidget(self.label_18)
-
-
-        # remove Qdoublespinbox
-
-        # spacer for qdoublespin box
-        # spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        # self.horizontalLayout_16.addItem(spacerItem13)
-
-        # self.set_tax = QtWidgets.QDoubleSpinBox(parent=self.frame_3)
-        # self.set_tax.setMinimumSize(QtCore.QSize(180, 250))
-        # self.set_tax.setObjectName("set_tax")
-        # self.set_tax.setRange(0.00, 120.00)
-        # self.set_tax.setValue(7.50)
-        # self.set_tax.setSingleStep(0.1)
-        # self.set_tax.setEnabled(True)
-        # self.horizontalLayout_16.addWidget(self.set_tax)
-
         self.set_tax = QtWidgets.QLineEdit(parent=self.frame_3)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -545,10 +530,32 @@ class Ui_MainWindow(object):
         self.set_tax.setText("7.50")
         self.set_tax.setObjectName("tax rate(%)")
         self.horizontalLayout_16.addWidget(self.set_tax)
-
         self.horizontalLayout_13.addWidget(self.frame_3)
         self.verticalLayout_12.addWidget(self.frame_9)
+        self.frame_5 = QtWidgets.QFrame(parent=self.widget_4)
+        self.frame_5.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_5.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_5.setObjectName("frame_5")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.frame_5)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.frame_14 = QtWidgets.QFrame(parent=self.frame_5)
+        self.frame_14.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_14.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_14.setObjectName("frame_14")
+        self.horizontalLayout_9.addWidget(self.frame_14)
+        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem14)
+        self.update_summary_btn = QtWidgets.QPushButton(parent=self.frame_5)
+        icon6 =QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("./icon/refresh-cw.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.update_summary_btn.setIcon(icon6)
+        self.update_summary_btn.setMinimumSize(QtCore.QSize(100, 25))
+        self.update_summary_btn.setMaximumSize(QtCore.QSize(100, 30))
+        self.update_summary_btn.setObjectName("update_summary_btn")
+        self.horizontalLayout_9.addWidget(self.update_summary_btn)
+        self.verticalLayout_12.addWidget(self.frame_5)
         self.verticalLayout_9.addWidget(self.widget_4)
+
         self.horizontalLayout_5.addWidget(self.summaryFrame)
         self.verticalLayout_6.addWidget(self.invoiceInfoFrame)
         self.clientFrame = QtWidgets.QWidget(parent=self.create_invoice_page)
@@ -727,6 +734,7 @@ class Ui_MainWindow(object):
         self.label_17.setText(_translate("MainWindow", "Discount :"))
         self.label_15.setText(_translate("MainWindow", "Tax :"))
         self.label_18.setText(_translate("MainWindow", "Tax (%):"))
+        self.update_summary_btn.setText(_translate("MainWindow", "Update"))
         self.label_9.setText(_translate("MainWindow", "Phone :"))
         self.label_11.setText(_translate("MainWindow", "Note :"))
         self.label_7.setText(_translate("MainWindow", "Contact person :"))

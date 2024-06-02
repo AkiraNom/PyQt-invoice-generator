@@ -1,6 +1,6 @@
 import sys
-
-from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidgetItem, QMessageBox
+from datetime import datetime
+from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidget, QTableWidgetItem, QMessageBox
 
 from invoice import Ui_MainWindow
 from add_item import Ui_add_item
@@ -20,6 +20,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.new_btn.clicked.connect(self.new_invoice)
         self.add_btn.clicked.connect(self.open_add_item_dialog)
         self.clear_btn.clicked.connect(self.clear_table_data)
+        self.update_summary_btn.clicked.connect(self.update_summaryFrame)
 
         ### add_item_dialog ###
 
@@ -29,6 +30,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def cancelInvoice(self):
 
         self.n_invoice.clear()
+        self.date.setText(datetime.today().strftime('%Y-%m-%d'))
         self.clientName.clear()
         self.clientContact.clear()
         self.clientEmail.clear()
@@ -46,6 +48,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(self.tableWidget.rowCount()):
             self.tableWidget.removeRow(0)
 
+        self.update_summaryFrame()
+
+
     def new_invoice(self):
         self.clear_table_data()
         self.cancelInvoice()
@@ -60,13 +65,46 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.dlg.exec()
 
+    def get_col_data(self, column):
+        data = []
+        for row in range(self.tableWidget.rowCount()):
+            it = self.tableWidget.item(row, column)
+            text = it.text() if it is not None else ""
+            data.append(text)
+
+        return data
+
+    def cal_sum_data(self, dtype: int| float , data:list):
+
+        result = sum(map(dtype, data))
+        return result
+
+    def update_summaryFrame(self):
+
+        _subtotal = self.get_col_data(5)
+        _subtotal = self.cal_sum_data(float,_subtotal)
+        _total_quantity = self.get_col_data(4)
+        _total_quantity = self.cal_sum_data(int,_total_quantity)
+        _discount = float(self.discount.text().strip())
+        _set_tax = float(self.set_tax.text().strip())
+
+        _tax = (_subtotal - _discount) * (_set_tax*0.01)
+        _total = _subtotal + _tax - _discount
+
+
+        self.total.setText(str(f"{_total:.2f}"))
+        self.total_quantity.setText(str(f"{_total_quantity:.2f}"))
+        self.subtotal.setText(str(f"{_subtotal:.2f}"))
+        self.discount.setText(str(f"{_discount:.2f}"))
+        self.tax.setText(str(f"{_tax:.2f}"))
+
     def show_data(self, data):
 
         try:
             id = str(data['id'])
             name = str(data['name'])
             desc = str(data['description'])
-            price = str(data['price'])
+            price = str(f"{float(data['price']):.2f}")
             quantity = str(data['quantity'])
             amount = str(f"{float(data['price'])*int(data['quantity']):.2f}")
 
@@ -91,6 +129,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         table.setItem(row_count, 3, QTableWidgetItem(price))
         table.setItem(row_count, 4, QTableWidgetItem(quantity))
         table.setItem(row_count, 5, QTableWidgetItem(amount))
+
+        self.update_summaryFrame()
 
     def new_item_save(self):
 
