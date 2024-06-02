@@ -204,7 +204,7 @@ class Ui_add_item(object):
 
     def retranslateUi(self, add_item):
         _translate = QtCore.QCoreApplication.translate
-        add_item.setWindowTitle(_translate("add_item", "Dialog"))
+        add_item.setWindowTitle(_translate("add_item", "Data Entry Dialog"))
         self.window_title.setText(_translate("add_item", "Add New Item"))
         self.label_2.setText(_translate("add_item", "Item ID "))
         self.label_3.setText(_translate("add_item", "Item Name"))

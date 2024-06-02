@@ -1,6 +1,7 @@
 import sys
 from datetime import datetime
-from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidget, QTableWidgetItem, QMessageBox
+from PyQt6 import QtCore, QtGui
+from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidget, QTableWidgetItem, QMessageBox, QComboBox, QPushButton, QMenu
 
 from invoice import Ui_MainWindow
 from add_item import Ui_add_item
@@ -93,10 +94,62 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
         self.total.setText(str(f"{_total:.2f}"))
-        self.total_quantity.setText(str(f"{_total_quantity:.2f}"))
+        self.total_quantity.setText(str(_total_quantity))
         self.subtotal.setText(str(f"{_subtotal:.2f}"))
         self.discount.setText(str(f"{_discount:.2f}"))
         self.tax.setText(str(f"{_tax:.2f}"))
+
+    def edit_item_data(self,data):
+        self.dlg = AddItemWindow()
+
+        # reuse 'add_tem.py' ui
+        _translate = QtCore.QCoreApplication.translate
+        self.dlg.ui.window_title.setText(_translate("add_item", "Edit Item"))
+        self.dlg.ui.item_id.setText(data["id"])
+        self.dlg.ui.item_name.setCurrentText(data["name"])
+        self.dlg.ui.description.setPlainText(data["description"])
+        self.dlg.ui.price.setText(data["price"])
+        self.dlg.ui.quantity.setText(data["quantity"])
+
+        self.dlg.ui.add_item_btn.clicked.connect(self.new_item_save)
+        self.dlg.ui.clear_field_btn.clicked.connect(self.dlg.clear_data_field)
+        self.dlg.ui.close_window_btn.clicked.connect(self.dlg.close_item_window)
+
+        self.dlg.exec()
+
+    def action_edit_triggered(self):
+
+        table = self.tableWidget
+        id = table.item(table.currentRow(),0).text()
+        name = table.item(table.currentRow(),1).text()
+        desc = table.item(table.currentRow(),2).text()
+        price = table.item(table.currentRow(),3).text()
+        quantity = table.item(table.currentRow(),4).text()
+
+        data = {
+            "id" : id,
+            "name":name,
+            "description":desc,
+            "price":price,
+            "quantity":quantity
+        }
+
+        self.edit_item_data(data)
+
+
+    def action_delete_triggered(self):
+
+        table = self.tableWidget
+
+        if table.rowCount() >0:
+            currentRow = table.currentRow()
+            item_name = table.item(table.currentRow(),1).text()
+            choice = QMessageBox.warning(self, "Delete data", f"Are you sure to delete {item_name} ?",
+                                               QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel)
+            if choice == QMessageBox.StandardButton.Yes:
+                table.removeRow(currentRow)
+                self.update_summaryFrame()
+
 
     def show_data(self, data):
 
@@ -129,6 +182,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         table.setItem(row_count, 3, QTableWidgetItem(price))
         table.setItem(row_count, 4, QTableWidgetItem(quantity))
         table.setItem(row_count, 5, QTableWidgetItem(amount))
+
+        action_edit = QtGui.QAction("Edit", self)
+        action_delete = QtGui.QAction("Delete", self)
+
+        # Connect actions to functions
+        action_edit.triggered.connect(lambda: self.action_edit_triggered())
+        action_delete.triggered.connect(lambda: self.action_delete_triggered())
+
+        # Create QMenu
+        menu = QMenu(self)
+        # Add actions
+        menu.addActions([action_edit, action_delete])
+
+        option_btn = QPushButton(self)
+        option_btn.setText("Option")
+        option_btn.setMenu(menu)
+        table.setCellWidget(row_count,6,option_btn)
 
         self.update_summaryFrame()
 
