@@ -1,10 +1,14 @@
-import sys
 from datetime import datetime
+import os
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidget, QTableWidgetItem, QMessageBox, QComboBox, QPushButton, QMenu
+import shutil
+import sys
 
 from invoice import Ui_MainWindow
 from add_item import Ui_add_item
+from create_report import InvoiceData
+from pdfViewer import PdfViewer
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
@@ -20,6 +24,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # header button action
         self.new_btn.clicked.connect(self.new_invoice)
         self.add_btn.clicked.connect(self.open_add_item_dialog)
+        self.print_btn.clicked.connect(self.saveInvoice)
         self.clear_btn.clicked.connect(self.clear_table_data)
         self.update_summary_btn.clicked.connect(self.update_summaryFrame)
 
@@ -150,7 +155,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 table.removeRow(currentRow)
                 self.update_summaryFrame()
 
-
     def show_data(self, data):
 
         try:
@@ -190,9 +194,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         action_edit.triggered.connect(lambda: self.action_edit_triggered())
         action_delete.triggered.connect(lambda: self.action_delete_triggered())
 
-        # Create QMenu
         menu = QMenu(self)
-        # Add actions
+
         menu.addActions([action_edit, action_delete])
 
         option_btn = QPushButton(self)
@@ -207,6 +210,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         add_item = self.dlg.add_new_item()
         self.show_data(data=add_item)
 
+    def generate_invoice(self):
+        companyName = "TEST.co"
+        email = "XXXXXXX@gmail.com"
+        phone = "XXX-XXXXXXX"
+        companyAddress ="Japan"
+        table = self.tableWidget
+        logoFile = "./icon/company_log.png"
+        # logoFile = None
+        total = "320"
+        discount = "20"
+        payment = "100"
+        rest = "200"
+        client = "Jone Doe"
+        address_client = "US"
+        n_invoice = "BSXXXXXXX"
+
+        InvoiceData(companyName,email,phone,companyAddress,table,logoFile,total,discount,payment,rest,client,address_client,n_invoice)
+
+    def saveInvoice(self):
+
+        self.generate_invoice()
+        invoiceNumber = "BSXXXXXXX"
+        client = "Jone Doe"
+        file = invoiceNumber+"_"+client+".pdf"
+        # file = self.n_invoice.text()+"_"+self.client.text()+".pdf"
+        shutil.copy(f'{file}', f'./saved_invoices/{file}')
+        os.remove(file)
+
+    def printInvoice(self):
+
+        self.createInvoice()
+        file = "invoice-test-client.pdf"
+        # file = self.n_invoice.text()+"_"+self.client.text()+".pdf"
+        self.pdf_viewer = PdfViewer(file)
+        self.pdf_viewer.showMaximized()
+
 class AddItemWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -214,7 +253,7 @@ class AddItemWindow(QDialog):
         self.ui.setupUi(self)
 
     def new_item_data(self):
-        # retrieve data from input field
+
         id = self.ui.item_id.text().strip()
         name = self.ui.item_name.currentText().strip()
         desc = self.ui.description.toPlainText()
@@ -242,7 +281,7 @@ class AddItemWindow(QDialog):
             pass
 
     def clear_data_field(self):
-        # Clear data in UI components
+
         self.ui.item_id.clear()
         self.ui.item_name.clear()
         self.ui.price.setText("0.00")
