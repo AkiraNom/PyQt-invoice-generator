@@ -30,6 +30,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         ### add_item_dialog ###
 
+
+
+
+        ######test variables#######################
+        self.invoice_n = "BSXXXXXXXX"
+        self.client_name = "Jone Doe"
+
     def invoice_page(self):
         self.stackedWidget.setCurrentIndex(1)
 
@@ -47,8 +54,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.total_quantity.setText("0")
         self.subtotal.setText("0.00")
         self.discount.setText("0.00")
-        self.tax.setText("0.00")
-        self.set_tax.setText("7.50")
+        self.vat.setText("0.00")
+        self.set_vat.setText("7.50")
 
     def clear_table_data(self):
         for i in range(self.tableWidget.rowCount()):
@@ -92,17 +99,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         _total_quantity = self.get_col_data(4)
         _total_quantity = self.cal_sum_data(int,_total_quantity)
         _discount = float(self.discount.text().strip())
-        _set_tax = float(self.set_tax.text().strip())
+        _set_vat = float(self.set_vat.text().strip())
 
-        _tax = (_subtotal - _discount) * (_set_tax*0.01)
-        _total = _subtotal + _tax - _discount
+        _vat = (_subtotal - _discount) * (_set_vat*0.01)
+        _total = _subtotal + _vat - _discount
 
 
         self.total.setText(str(f"{_total:.2f}"))
         self.total_quantity.setText(str(_total_quantity))
         self.subtotal.setText(str(f"{_subtotal:.2f}"))
         self.discount.setText(str(f"{_discount:.2f}"))
-        self.tax.setText(str(f"{_tax:.2f}"))
+        self.vat.setText(str(f"{_vat:.2f}"))
 
     def edit_item_data(self,data):
         self.dlg = AddItemWindow()
@@ -211,28 +218,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show_data(data=add_item)
 
     def generate_invoice(self):
-        companyName = "TEST.co"
-        email = "XXXXXXX@gmail.com"
-        phone = "XXX-XXXXXXX"
-        companyAddress ="Japan"
-        table = self.tableWidget
-        logoFile = "./icon/company_log.png"
-        # logoFile = None
-        total = "320"
-        discount = "20"
-        payment = "100"
-        rest = "200"
-        client = "Jone Doe"
-        address_client = "US"
-        n_invoice = "BSXXXXXXX"
 
-        InvoiceData(companyName,email,phone,companyAddress,table,logoFile,total,discount,payment,rest,client,address_client,n_invoice)
+
+        companyName = "TEST.co"
+
+        companyAddress ="6622 Abshire Mills Port Orlofurt, 05820 United States"
+
+        client = self.client_name
+        address_client = "9552 Vandervort Spurs Paradise, 43325 United States"
+        n_invoice = self.invoice_n
+
+
+        InvoiceData(self.companyName,
+                    self.companyAddress,
+                    self.tableWidget,
+                    self.company_logo,
+                    self.subtotal,
+                    self.discount,
+                    self.vat_rate,
+                    self.vat,
+                    self.total,
+                    self.client_name,
+                    self.clientAddress,
+                    self.invoice_n
+                    )
 
     def saveInvoice(self):
 
         self.generate_invoice()
-        invoiceNumber = "BSXXXXXXX"
-        client = "Jone Doe"
+        invoiceNumber = self.invoice_n
+        client = self.client_name
         file = invoiceNumber+"_"+client+".pdf"
         # file = self.n_invoice.text()+"_"+self.client.text()+".pdf"
         shutil.copy(f'{file}', f'./saved_invoices/{file}')

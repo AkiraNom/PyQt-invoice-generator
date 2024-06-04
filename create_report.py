@@ -1,112 +1,170 @@
+from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.utils import ImageReader
 from datetime import date
 
+import os
+
 class InvoiceData():
-    def __init__(self,company,email,phone,companyAddress,table,logo,total,discount,payment,rest,client,clientAddress,invoiceNumber) -> None:
+    def __init__(self,company,companyAddress,table,logo,subtotal,discount,vat_rate,vat,total,client,clientAddress,invoiceNumber):
         d_ate = date.today()
         today = d_ate.strftime("%d-%m-%Y")
         file = invoiceNumber+"_"+client+".pdf"
-        my_canvas = canvas.Canvas(file, pagesize=A4)
-        mystyle = ParagraphStyle('my style',fontName='Helvetica',fontSize=10,leading=15)
-        my_canvas.setLineWidth(.5)
-        my_canvas.setFont('Helvetica-Bold', 18)
-        my_canvas.drawString(24, 817, company)
-        my_canvas.setFont('Helvetica', 12)
-        my_canvas.drawString(24, 800, companyAddress)
-        my_canvas.drawString(24, 783, phone)
-        my_canvas.drawString(24, 766, email)
-        # img = ImageReader(logo)
-        img = ImageReader('C:/Users/carve/Desktop/python/PyQT-desktop-application-venv/Sample-code/invoice-generator-main/icon/company_log.png')
-        my_canvas.drawImage(img, 460, 760, width=60, height=60, preserveAspectRatio=True, mask='auto')
-        my_canvas.setFont('Helvetica-Bold', 15)
-        my_canvas.drawCentredString(297.5, 735, 'Sales Invoice')
-        my_canvas.setFont('Helvetica', 10)
-        my_canvas.line(24, 740, 230, 740)
-        my_canvas.line(360, 740, 571, 740)
-        my_canvas.drawString(24, 720, 'Client :')
-        my_canvas.drawString(75, 720, client)
-        my_canvas.drawString(473, 720, 'N° Invoice :')
-        my_canvas.drawRightString(571, 720, invoiceNumber)
-        my_canvas.drawString(24, 703, 'Address :')
-        my_canvas.drawString(474, 703, 'Date :')
-        my_canvas.drawRightString(571, 703, today)
+        page = canvas.Canvas(file, pagesize=A4)
+        style = ParagraphStyle("style",fontName="Helvetica",fontSize=10,leading=15)
 
-        p1 = Paragraph(clientAddress, mystyle)
+        base_font_color = "#000000"
+        highlight_font_color = "#5c6ac4"
 
-        p1.wrapOn(my_canvas, 200, 100)
-        p1.drawOn(my_canvas, 75, 684)
+        page.drawImage(logo, 24, 760, width=100, height=100, preserveAspectRatio=True, mask="auto")
+        page.setFont("Helvetica-Bold", 18)
+        page.drawString(90, 773, "Business Solution Inc.")
+        page.setFont("Helvetica", 12)
+        page.setFillColor(HexColor("#b1b1b1"))
+        page.drawString(350, 783, "Date:")
+        page.drawString(450, 783,"Invoice #:")
+        page.setFont("Helvetica-Bold", 12)
+        page.setFillColor(HexColor(highlight_font_color))
+        page.drawString(350, 763, today)
+        page.drawString(450, 763,invoiceNumber)
 
-        my_canvas.line(24, 670, 571, 670)
+        left_padding = 20
+        top_padding = 615
+        width = 560
+        height = 120
+        page.setFillColor(HexColor("#f1f5f9"))
+        page.setLineWidth(0.1)
+        page.setStrokeColor(HexColor("#f1f5f9"))
+        page.rect(left_padding, top_padding, width, height, stroke=1,fill=1)
 
-        my_canvas.setFont('Helvetica-Bold', 9)
+        page.setFont("Helvetica-Bold", 12)
+        page.setFillColor(HexColor(base_font_color))
+        page.drawString(25, 700, company)
+        page.drawString(400, 700, client)
+        page.setFont("Helvetica", 10)
+        page.drawString(25, 673, "Address :")
+        page.drawString(400, 673, "Address:")
 
-        my_canvas.drawCentredString(49 , 657, 'N°Product')
-        my_canvas.drawCentredString(144, 657, 'Product')
-        my_canvas.drawCentredString(250, 657, 'Quantity')
-        my_canvas.drawCentredString(350, 657, 'Price')
-        my_canvas.drawCentredString(490, 657, 'Amount')
+        p1 = Paragraph(companyAddress, style)
 
+        p1.wrapOn(page, 100, 100)
+        p1.drawOn(page, 76, 636)
 
-        my_canvas.line(24, 650, 571, 650)
-        my_canvas.setFont('Helvetica', 9)
+        p2 = Paragraph(clientAddress, style)
 
-        line_y = 650
+        p2.wrapOn(page, 100, 100)
+        p2.drawOn(page, 451, 636)
+
+        page.setFont("Helvetica-Bold", 11)
+        page.setFillColor(HexColor(highlight_font_color))
+
+        page.drawCentredString(49 , 592, "#")
+        page.drawCentredString(144, 592, "Product details")
+        page.drawCentredString(250, 592, "Quantity")
+        page.drawCentredString(350, 592, "Price")
+        page.drawCentredString(490, 922, "Amount")
+
+        page.setLineWidth(1.2)
+        page.setStrokeColor(HexColor(highlight_font_color))
+        page.line(24, 585, 571, 585)
+
+        page.setFont("Helvetica", 9)
+        page.setLineWidth(.5)
+        page.setFillColor(HexColor(base_font_color))
+
+        line_y = 585
 
         row = table.rowCount()
 
         for i in range(row):
             if line_y <= 30 and line_y >= 0:
 
-                my_canvas.showPage()
-                my_canvas.setFont('Helvetica', 9)
-                line_y = 817
+                page.showPage()
+                page.setFont("Helvetica", 9)
+                line_y = 752
 
-                my_canvas.line(24, line_y, 571, line_y)
+                page.line(24, line_y, 571, line_y)
 
                 line_y = line_y - 13
 
-                my_canvas.drawCentredString(49 , line_y, table.item(i,0).text())
-                my_canvas.drawCentredString(144, line_y, table.item(i,1).text())
-                my_canvas.drawCentredString(250, line_y, table.item(i,2).text())
-                my_canvas.drawCentredString(350, line_y, table.item(i,3).text())
-                my_canvas.drawCentredString(490, line_y, table.item(i,4).text())
+                page.drawCentredString(49 , line_y, f"{i+1}.")
+                page.drawCentredString(144, line_y, table.item(i,1).text())
+                page.drawCentredString(250, line_y, table.item(i,2).text())
+                page.drawCentredString(350, line_y, f"${table.item(i,3).text()}")
+                page.drawCentredString(490, line_y, f"${table.item(i,4).text()}")
 
                 line_y = line_y - 7
 
-                my_canvas.line(24, line_y, 571, line_y)
+                page.setStrokeColor(HexColor("#e5e7eb"))
+                page.line(24, line_y, 571, line_y)
 
             else:
                 line_y = line_y - 13
 
-                my_canvas.drawCentredString(49, line_y, table.item(i,0).text())
-                my_canvas.drawCentredString(144, line_y, table.item(i,1).text())
-                my_canvas.drawCentredString(250, line_y, table.item(i,2).text())
-                my_canvas.drawCentredString(350, line_y, table.item(i,3).text())
-                my_canvas.drawCentredString(490, line_y, table.item(i,4).text())
+                # page.drawCentredString(49, line_y, table.item(i,0).text())
+                page.drawCentredString(49 , line_y, f"{i+1}.")
+                page.drawCentredString(144, line_y, table.item(i,1).text())
+                page.drawCentredString(250, line_y, table.item(i,2).text())
+                page.drawCentredString(350, line_y, f"${table.item(i,3).text()}")
+                page.drawCentredString(490, line_y, f"${table.item(i,4).text()}")
 
                 line_y = line_y - 7
 
-                my_canvas.line(24, line_y, 571, line_y)
+                page.setStrokeColor(HexColor("#e5e7eb"))
+                page.line(24, line_y, 571, line_y)
 
         if line_y >= 30 and line_y <= 70:
             line_y = line_y = 817
-            my_canvas.showPage()
-            my_canvas.setFont('Helvetica', 9)
+            page.showPage()
+            page.setFont("Helvetica", 9)
 
-        my_canvas.setFont('Helvetica-Bold', 10)
-        my_canvas.drawRightString(500, line_y-20, 'Total :')
-        my_canvas.drawRightString(500, line_y-35, 'Discount :')
-        my_canvas.drawRightString(500, line_y-50, 'Payment :')
-        my_canvas.drawRightString(500, line_y-65, 'Rest :')
+        page.setFont("Helvetica-Bold", 12)
+        page.setFillColor(HexColor("#3d3d3d"))
+        page.setLineWidth(1.2)
+        page.setStrokeColor(HexColor("#3d3d3d"))
+        page.drawRightString(480, line_y-35, "Subtotal :")
+        page.line(480, line_y-38, 560, line_y-38)
+        page.drawRightString(480, line_y-53, "Discount :")
+        page.line(480, line_y-56, 560, line_y-56)
+        page.drawRightString(480, line_y-71, f"VAT ({vat_rate}%) :")
+        page.line(480, line_y-74, 560, line_y-74)
+        page.drawRightString(480, line_y-89, "Total :")
+        page.line(480, line_y-92, 560, line_y-92)
 
-        my_canvas.setFont('Helvetica', 10)
-        my_canvas.drawRightString(571, line_y-20, total)
-        my_canvas.drawRightString(571, line_y-35, discount)
-        my_canvas.drawRightString(571, line_y-50, payment)
-        my_canvas.drawRightString(571, line_y-65, rest)
+        # page.setFont("Helvetica-Bold", 10)
+        page.setFillColor(HexColor(highlight_font_color))
+        page.drawRightString(551, line_y-35, f"${subtotal}")
+        page.drawRightString(551, line_y-53, f"-${discount}")
+        page.drawRightString(551, line_y-71, f"${vat}")
+        page.drawRightString(551, line_y-89, f"${total}")
 
-        my_canvas.save()
+        bank = "Silicon Bank"
+        bank_code = " 123456"
+        account_n = "132445556"
+        payment_reference = "BBB-00032"
+        page.saveState()
+        page.setFont("Helvetica-Bold", 12)
+        page.setFillColor(HexColor(highlight_font_color))
+        page.drawString(24, line_y-148, "PAYMENT DETAILS")
+        page.setFont("Helvetica", 12)
+        page.setFillColor(HexColor(base_font_color))
+        page.drawString(24, line_y-160, bank)
+        page.drawString(24, line_y-172, f"Bank Code: {bank_code}")
+        page.drawString(24, line_y-184, f"Account Number: {account_n}")
+        page.drawString(24, line_y-196, f"Payment Reference: {payment_reference}")
+
+        page.setFont("Helvetica-Bold", 12)
+        page.setFillColor(HexColor(highlight_font_color))
+        page.drawString(24, line_y-230, "Notes:")
+        page.setFont("Helvetica", 12)
+        page.setFillColor(HexColor(base_font_color))
+
+        notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+        p3 = Paragraph(notes, style)
+
+        p3.wrapOn(page, 500, 200)
+        p3.drawOn(page, 75, line_y-280)
+
+        page.save()
