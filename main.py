@@ -23,12 +23,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # header button action
         self.new_btn.clicked.connect(self.new_invoice)
         self.add_btn.clicked.connect(self.open_add_item_dialog)
-        self.print_btn.clicked.connect(self.saveInvoice)
+        self.save_btn.clicked.connect(self.saveInvoice)
         self.clear_btn.clicked.connect(self.clear_table_data)
+        self.close_btn.clicked.connect(self.close_window)
         self.update_summary_btn.clicked.connect(self.update_summaryFrame)
 
         ######test variables#######################
-        self.invoice_n = "AAA-0035"
         self.client_name = "Customer Comapny Inc"
         self.clientAddress = "9552 Vandervort Spurs Paradise, 43325 United States"
 
@@ -157,7 +157,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.edit_item_data(data)
 
-
     def action_delete_triggered(self):
 
         table = self.tableWidget
@@ -239,25 +238,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.total.text(),
                     self.client_name,
                     self.clientAddress,
-                    self.invoice_n
+                    self.n_invoice.text()
                     )
 
     def saveInvoice(self):
 
         self.generate_invoice()
-        invoiceNumber = self.invoice_n
+        invoiceNumber = self.n_invoice.text()
         client = self.client_name
         file = invoiceNumber+"_"+client+".pdf"
         shutil.copy(f'{file}', f'./saved_invoices/{file}')
         os.remove(file)
 
-    def printInvoice(self):
-
-        self.createInvoice()
-        file = self.invoice_n+"_"+self.client_name+".pdf"
-        shutil.copy(f'{file}', f'./saved_invoices/{file}')
-        self.pdf_viewer = PdfViewer(file)
-        self.pdf_viewer.showMaximized()
+    def close_window(self):
+        self.close()
 
 class AddItemWindow(QDialog):
     def __init__(self, parent=None):
