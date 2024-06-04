@@ -19,7 +19,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle("Invoice Generator")
         self.SignIn_btn.clicked.connect(self.invoice_page)
 
-
         #### invoice_page ####
         # header button action
         self.new_btn.clicked.connect(self.new_invoice)
@@ -28,17 +27,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.clear_btn.clicked.connect(self.clear_table_data)
         self.update_summary_btn.clicked.connect(self.update_summaryFrame)
 
-        ### add_item_dialog ###
-
-
-
-
         ######test variables#######################
-        self.invoice_n = "BSXXXXXXXX"
-        self.client_name = "Jone Doe"
+        self.invoice_n = "AAA-0035"
+        self.client_name = "Customer Comapny Inc"
+        self.clientAddress = "9552 Vandervort Spurs Paradise, 43325 United States"
 
     def invoice_page(self):
-        self.stackedWidget.setCurrentIndex(1)
+
+        if (self.companyName.text() == "Supplier Company INC") & (self.companyEmail.text() =="suppliercompany@supplier.com"):
+            self.stackedWidget.setCurrentIndex(1)
+
+        else:
+
+            dlg = QMessageBox(self)
+            dlg.setWindowTitle("Input Error")
+            dlg.setText("""Invalid email address / password combination""")
+            dlg.setIcon(QMessageBox.Icon.Warning)
+            button = dlg.exec()
+
+            if button == QMessageBox.StandardButton.Close:
+                print("Close")
+
+            return
 
     def cancelInvoice(self):
 
@@ -55,14 +65,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.subtotal.setText("0.00")
         self.discount.setText("0.00")
         self.vat.setText("0.00")
-        self.set_vat.setText("7.50")
+        self.vat_rate.setText("7.50")
 
     def clear_table_data(self):
         for i in range(self.tableWidget.rowCount()):
             self.tableWidget.removeRow(0)
 
         self.update_summaryFrame()
-
 
     def new_invoice(self):
         self.clear_table_data()
@@ -99,9 +108,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         _total_quantity = self.get_col_data(4)
         _total_quantity = self.cal_sum_data(int,_total_quantity)
         _discount = float(self.discount.text().strip())
-        _set_vat = float(self.set_vat.text().strip())
+        _vat_rate = float(self.vat_rate.text().strip())
 
-        _vat = (_subtotal - _discount) * (_set_vat*0.01)
+        _vat = (_subtotal - _discount) * (_vat_rate*0.01)
         _total = _subtotal + _vat - _discount
 
 
@@ -219,25 +228,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def generate_invoice(self):
 
-
-        companyName = "TEST.co"
-
-        companyAddress ="6622 Abshire Mills Port Orlofurt, 05820 United States"
-
-        client = self.client_name
-        address_client = "9552 Vandervort Spurs Paradise, 43325 United States"
-        n_invoice = self.invoice_n
-
-
-        InvoiceData(self.companyName,
-                    self.companyAddress,
+        InvoiceData(self.companyName.text(),
+                    self.companyAddress.text(),
                     self.tableWidget,
                     self.company_logo,
-                    self.subtotal,
-                    self.discount,
-                    self.vat_rate,
-                    self.vat,
-                    self.total,
+                    self.subtotal.text(),
+                    self.discount.text(),
+                    self.vat_rate.text(),
+                    self.vat.text(),
+                    self.total.text(),
                     self.client_name,
                     self.clientAddress,
                     self.invoice_n
@@ -249,15 +248,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         invoiceNumber = self.invoice_n
         client = self.client_name
         file = invoiceNumber+"_"+client+".pdf"
-        # file = self.n_invoice.text()+"_"+self.client.text()+".pdf"
         shutil.copy(f'{file}', f'./saved_invoices/{file}')
         os.remove(file)
 
     def printInvoice(self):
 
         self.createInvoice()
-        file = "invoice-test-client.pdf"
-        # file = self.n_invoice.text()+"_"+self.client.text()+".pdf"
+        file = self.invoice_n+"_"+self.client_name+".pdf"
+        shutil.copy(f'{file}', f'./saved_invoices/{file}')
         self.pdf_viewer = PdfViewer(file)
         self.pdf_viewer.showMaximized()
 
