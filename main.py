@@ -8,13 +8,17 @@ import sys
 from invoice import Ui_MainWindow
 from add_item import Ui_add_item
 from create_report import InvoiceData
-from pdfViewer import PdfViewer
+from connect_db import DataBaseConnect
+from db_dialog import Ui_db_dialog
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
+
+        self.connect_db = DataBaseConnect()
+        self.db_table = Ui_db_dialog()
 
         self.setWindowTitle("Invoice Generator")
         self.SignIn_btn.clicked.connect(self.invoice_page)
@@ -27,10 +31,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.clear_btn.clicked.connect(self.clear_table_data)
         self.close_btn.clicked.connect(self.close_window)
         self.update_summary_btn.clicked.connect(self.update_summaryFrame)
-
-        ######test variables#######################
-        self.client_name = "Customer Comapny Inc"
-        self.clientAddress = "9552 Vandervort Spurs Paradise, 43325 United States"
 
     def invoice_page(self):
 
@@ -76,6 +76,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def new_invoice(self):
         self.clear_table_data()
         self.cancelInvoice()
+
+    def open_db_dialog(self):
 
 
     def open_add_item_dialog(self):
