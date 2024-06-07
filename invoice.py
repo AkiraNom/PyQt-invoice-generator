@@ -265,14 +265,14 @@ class Ui_MainWindow(object):
         self.new_btn.setIcon(icon)
         self.new_btn.setObjectName("new_btn")
         self.horizontalLayout_4.addWidget(self.new_btn)
-        self.company_btn = QtWidgets.QPushButton(parent=self.headerInvoiceFrame)
-        self.company_btn.setMinimumSize(QtCore.QSize(0, 25))
-        self.company_btn.setMaximumSize(QtCore.QSize(100, 30))
+        self.select_client_btn = QtWidgets.QPushButton(parent=self.headerInvoiceFrame)
+        self.select_client_btn.setMinimumSize(QtCore.QSize(0, 25))
+        self.select_client_btn.setMaximumSize(QtCore.QSize(100, 30))
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("./icon/user-plus.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-        self.company_btn.setIcon(icon1)
-        self.company_btn.setObjectName("company_btn")
-        self.horizontalLayout_4.addWidget(self.company_btn)
+        self.select_client_btn.setIcon(icon1)
+        self.select_client_btn.setObjectName("select_client_btn")
+        self.horizontalLayout_4.addWidget(self.select_client_btn)
         self.add_btn = QtWidgets.QPushButton(parent=self.headerInvoiceFrame)
         self.add_btn.setMinimumSize(QtCore.QSize(0, 25))
         self.add_btn.setMaximumSize(QtCore.QSize(100, 30))
@@ -709,17 +709,11 @@ class Ui_MainWindow(object):
         spacerItem15 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout_6.addItem(spacerItem15)
 
-
         self.stackedWidget.addWidget(self.create_invoice_page)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-
         self.stackedWidget.setCurrentIndex(0)
-        # skip sign in page
-        # self.stackedWidget.setCurrentIndex(1)
-
-
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
@@ -736,10 +730,10 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Address"))
         self.SignIn_btn.setText(_translate("MainWindow", "Sign In"))
         self.new_btn.setText(_translate("MainWindow", "New Invoice"))
-        self.company_btn.setText(_translate("MainWindow", "Select client"))
+        self.select_client_btn.setText(_translate("MainWindow", "Select client"))
         self.add_btn.setText(_translate("MainWindow", "Add item"))
         self.save_btn.setText(_translate("MainWindow", "Save"))
-        self.clear_btn.setText(_translate("MainWindow", "Clear"))
+        self.clear_btn.setText(_translate("MainWindow", "Clear items"))
         self.close_btn.setText(_translate("MainWindow", "Close"))
         self.label_12.setText(_translate("MainWindow", "Invoice No.:"))
         self.label_13.setText(_translate("MainWindow", "Date :"))

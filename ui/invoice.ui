@@ -1642,7 +1642,7 @@ QTableView::item
   </widget>
  </widget>
  <resources>
-  <include location="../../icons/resources.qrc"/>
+  <include location="../../../icons/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

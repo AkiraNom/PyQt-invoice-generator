@@ -66,6 +66,21 @@ class DataBaseConnect:
         self.connection = sqlite3.connect(self.db_path)
         self.cursor = self.connection.cursor()
 
+    def common_search_execute(self, sql):
+        self.connector()
+
+        try:
+            self.cursor.execute(sql)
+            result = self.cursor.fetchall()
+            return result
+
+        except Exception:
+            return None
+
+        finally:
+            self.cursor.close()
+            self.connection.close()
+
     def get_data(self, search_flag="", client_name=""):
 
         if search_flag == "ALL":
@@ -75,12 +90,11 @@ class DataBaseConnect:
             sql = (f"SELECT client_name, email, phone, address, contact, note FROM {self.table_name}"
                 f"WHERE client_name='{client_name}'")
 
-        result = self.common_search_all_execute(sql=sql)
+        result = self.common_search_execute(sql=sql)
         return result
 
     def get_all_clients(self):
-        data = self.connect_db.get_data(search_flag="ALL")
-        self.close()
+        data = self.get_data(search_flag="ALL")
 
         return data
 

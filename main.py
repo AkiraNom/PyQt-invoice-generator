@@ -1,15 +1,119 @@
 from datetime import datetime
 import os
 from PyQt6 import QtCore, QtGui
+from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QMainWindow, QApplication, QDialog, QTableWidget, QTableWidgetItem, QMessageBox, QComboBox, QPushButton, QMenu
 import shutil
 import sys
+from PyQt6 import QtWidgets, uic
 
 from invoice import Ui_MainWindow
 from add_item import Ui_add_item
 from create_report import InvoiceData
 from connect_db import DataBaseConnect
-from db_dialog import Ui_db_dialog
+
+class SearchClientWindow(QDialog):
+
+    client_data_signal = pyqtSignal(list)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        uic.loadUi("./ui/search_db.ui", self)
+        self.connect_db = DataBaseConnect()
+        data = self.connect_db.get_all_clients()
+        self.client_table = self.tableWidget
+        css = '''
+            color:black;
+        '''
+        self.client_table.setStyleSheet(css)
+        self.import_csv_btn.clicked.connect(self.import_csv)
+        self.client_widget_close_btn.clicked.connect(self.close_dialog)
+
+
+        if data:
+            for info in data:
+                row_count = self.client_table.rowCount()
+                self.client_table.insertRow(row_count)
+                print(f"current row count: {row_count}")
+
+                action_add_btn = QtWidgets.QPushButton("Add")
+                action_add_btn.clicked.connect(lambda: self.action_add_triggered())
+                self.client_table.setCellWidget(row_count,0,action_add_btn)
+
+                for column in range(6):
+                    item = QTableWidgetItem(str(info[column]))
+                    self.client_table.setItem(row_count, column+1, item)
+
+    def action_add_triggered(self):
+        button = self.sender()
+        if button:
+            index = self.client_table.indexAt(button.pos())
+            if index.isValid():
+                row = index.row()
+                print(f"Add button clicked in row: {row}")
+
+
+            self.client_data = []
+            for col in range(self.client_table.columnCount()):
+                item = self.client_table.item(row,col)
+                if item == None:
+                    continue
+                self.client_data.append(item.text())
+
+        print([x for x in self.client_data])
+        self.client_data_signal.emit(self.client_data)
+
+    def import_csv(self):
+        self.connect_db.insert_csv()
+
+    def close_dialog(self):
+        self.close()
+
+class AddItemWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_add_item()
+        self.ui.setupUi(self)
+
+    def new_item_data(self):
+
+        id = self.ui.item_id.text().strip()
+        name = self.ui.item_name.currentText().strip()
+        desc = self.ui.description.toPlainText()
+        price = self.ui.price.text().strip()
+        quantity = self.ui.quantity.text().strip()
+
+        data_dict = {
+            "id" : id,
+            "name":name,
+            "description":desc,
+            "price":price,
+            "quantity":quantity
+        }
+
+        return data_dict
+
+    def add_new_item(self):
+
+        item_data = self.new_item_data()
+
+        if item_data:
+            return item_data
+
+        else:
+            pass
+
+    def clear_data_field(self):
+
+        self.ui.item_id.clear()
+        self.ui.item_name.clear()
+        self.ui.price.setText("0.00")
+        self.ui.quantity.setText("0.00")
+        self.ui.description.clear()
+
+    def close_item_window(self):
+        self.close()
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
@@ -17,8 +121,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__()
         self.setupUi(self)
 
-        self.connect_db = DataBaseConnect()
-        self.db_table = Ui_db_dialog()
+        self.search_client_window = SearchClientWindow()
+        self.search_client_window.client_data_signal.connect(self.handle_client_data)
 
         self.setWindowTitle("Invoice Generator")
         self.SignIn_btn.clicked.connect(self.invoice_page)
@@ -26,11 +130,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #### invoice_page ####
         # header button action
         self.new_btn.clicked.connect(self.new_invoice)
+        self.select_client_btn.clicked.connect(self.open_client_dialog)
         self.add_btn.clicked.connect(self.open_add_item_dialog)
         self.save_btn.clicked.connect(self.saveInvoice)
         self.clear_btn.clicked.connect(self.clear_table_data)
         self.close_btn.clicked.connect(self.close_window)
         self.update_summary_btn.clicked.connect(self.update_summaryFrame)
+
+    def handle_client_data(self, client_data):
+
+        print(f'Received data from the dialog: {client_data}')
+        self.clientName.setText(client_data[0])
+        self.clientContact.setText(client_data[4])
+        self.clientEmail.setText(client_data[1])
+        self.clientPhone.setText(client_data[2])
+        self.clientAddress.setText(client_data[3])
+        self.clientNote.setText(client_data[5])
 
     def invoice_page(self):
 
@@ -77,8 +192,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.clear_table_data()
         self.cancelInvoice()
 
-    def open_db_dialog(self):
+    def open_client_dialog(self):
 
+        self.search_client_window.exec()
 
     def open_add_item_dialog(self):
         self.dlg = AddItemWindow()
@@ -238,8 +354,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.vat_rate.text(),
                     self.vat.text(),
                     self.total.text(),
-                    self.client_name,
-                    self.clientAddress,
+                    self.clientName.text(),
+                    self.clientAddress.text(),
                     self.n_invoice.text()
                     )
 
@@ -247,59 +363,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.generate_invoice()
         invoiceNumber = self.n_invoice.text()
-        client = self.client_name
+        client = self.clientName.text()
         file = invoiceNumber+"_"+client+".pdf"
         shutil.copy(f'{file}', f'./saved_invoices/{file}')
         os.remove(file)
 
     def close_window(self):
         self.close()
-
-class AddItemWindow(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.ui = Ui_add_item()
-        self.ui.setupUi(self)
-
-    def new_item_data(self):
-
-        id = self.ui.item_id.text().strip()
-        name = self.ui.item_name.currentText().strip()
-        desc = self.ui.description.toPlainText()
-        price = self.ui.price.text().strip()
-        quantity = self.ui.quantity.text().strip()
-
-        data_dict = {
-            "id" : id,
-            "name":name,
-            "description":desc,
-            "price":price,
-            "quantity":quantity
-        }
-
-        return data_dict
-
-    def add_new_item(self):
-
-        item_data = self.new_item_data()
-
-        if item_data:
-            return item_data
-
-        else:
-            pass
-
-    def clear_data_field(self):
-
-        self.ui.item_id.clear()
-        self.ui.item_name.clear()
-        self.ui.price.setText("0.00")
-        self.ui.quantity.setText("0.00")
-        self.ui.description.clear()
-
-    def close_item_window(self):
-        self.close()
-
 
 app = QApplication(sys.argv)
 
