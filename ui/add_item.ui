@@ -119,6 +119,9 @@ QPushButton:hover {
            <height>16777215</height>
           </size>
          </property>
+         <property name="clearButtonEnabled">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -198,6 +201,13 @@ QPushButton:hover {
            <string>Item_5</string>
           </property>
          </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Import Item</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -443,7 +453,7 @@ QPushButton:hover {
   </widget>
  </widget>
  <resources>
-  <include location="../../icons/resources.qrc"/>
+  <include location="../../../icons/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

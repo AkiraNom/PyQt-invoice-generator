@@ -13,8 +13,9 @@ class Ui_MainWindow(object):
         MainWindow.setMinimumSize(QtCore.QSize(800, 650))
         MainWindow.setMaximumSize(QtCore.QSize(800, 650))
         MainWindow.setStyleSheet("#MainWindow {\n"
-"    background-color: white;\n"
-"/*    background-color:#a9d39e*/\n"
+# "    background-color: white;\n"
+"    background-color: #dce6fb;\n"
+# "    background-color:#a9d39e\n"
 "}\n"
 "* {\n"
 "    font-family:Calibri;\n"
@@ -87,6 +88,11 @@ class Ui_MainWindow(object):
 "    border-radius: 10px;\n"
 "    border: 2px solid  #E5E4E2;\n"
 "}\n"
+"#card_1:hover, #card_2:hover {\n"
+"    border-radius: 10px;\n"
+"    border: 2px solid #7B68EE;\n"
+"}\n"
+
 "\n"
 "#total, #total_quantity {\n"
 "    font-size:16px;\n"

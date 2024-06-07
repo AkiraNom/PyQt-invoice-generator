@@ -30,12 +30,10 @@ class SearchClientWindow(QDialog):
         self.import_csv_btn.clicked.connect(self.import_csv)
         self.client_widget_close_btn.clicked.connect(self.close_dialog)
 
-
         if data:
             for info in data:
                 row_count = self.client_table.rowCount()
                 self.client_table.insertRow(row_count)
-                print(f"current row count: {row_count}")
 
                 action_add_btn = QtWidgets.QPushButton("Add")
                 action_add_btn.clicked.connect(lambda: self.action_add_triggered())
@@ -51,8 +49,6 @@ class SearchClientWindow(QDialog):
             index = self.client_table.indexAt(button.pos())
             if index.isValid():
                 row = index.row()
-                print(f"Add button clicked in row: {row}")
-
 
             self.client_data = []
             for col in range(self.client_table.columnCount()):
@@ -120,6 +116,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
+        self.setWindowIcon(QtGui.QIcon('./icon/company_logo.png'))
 
         self.search_client_window = SearchClientWindow()
         self.search_client_window.client_data_signal.connect(self.handle_client_data)
@@ -283,7 +280,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             currentRow = table.currentRow()
             item_name = table.item(table.currentRow(),1).text()
             choice = QMessageBox.warning(self, "Delete data", f"Are you sure to delete {item_name} ?",
-                                               QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel)
+                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel)
             if choice == QMessageBox.StandardButton.Yes:
                 table.removeRow(currentRow)
                 self.update_summaryFrame()
